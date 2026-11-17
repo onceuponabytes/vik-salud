@@ -1,2 +1,2 @@
-# aws-learning-journey
-My AWS learning journey, cloud projects and hands-on labs.
+# VIK-salud
+Vik Salud – Cloud project showcasing architecture, implementation and AWS technologies.
