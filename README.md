@@ -1,71 +1,89 @@
-# VIK-salud
-Vik Salud – Cloud project showcasing architecture, implementation and AWS technologies.
-# VIK Salud 🏥☁️
+# VIK Salud
 
-### A patient-centered digital health platform
+**Prototipo web colaborativo para explorar una experiencia digital de salud desde los portales de paciente y profesional.**
 
-VIK Salud is a collaborative healthcare technology project designed to centralize relevant patient information and facilitate authorized access to clinical records across healthcare providers.
+> Esta publicación contiene una demostración estática con datos ficticios. No es un sistema clínico, no autentica usuarios y no debe utilizarse para atención ni decisiones médicas.
 
-The project was presented to Morris, where it received **Second Place** recognition.
+## Demo
 
-## 🎯 Project Objective
+- **Inicio de la demostración:** abre `index.html` o visita el sitio publicado con GitHub Pages.
+- **Portal del paciente:** acceso desde el botón correspondiente en la página de inicio.
+- **Portal profesional:** acceso desde el botón correspondiente en la página de inicio.
 
-To improve continuity of care through a digital platform that brings together patient health information, clinical documents and healthcare interactions.
+La demostración funciona en el navegador con un conjunto de datos de ejemplo. Los cambios son locales y se pierden al recargar. No se requiere AWS para recorrer estos dos portales.
 
-## ✨ Key Features
+## Funcionalidades visibles
 
-- **Patient Portal:** Access to personal health records and relevant clinical information.
-- **Clinical Records:** Centralized view of medical history, allergies, conditions and medications.
-- **Appointments:** Access to upcoming and previous appointments.
-- **Clinical Documents:** Management of prescriptions, medical orders, referrals and reports.
-- **Emergency QR:** Quick access to essential emergency information.
-- **Access Management:** Patient authorization management.
-- **Professional Portal:** Generation of structured clinical PDF documents.
+### Portal del paciente
 
-## 🏗️ Technologies & AWS Services
+- Vista de ficha y resumen de salud.
+- Consulta de documentos y citas de demostración.
+- Gestión visual de autorizaciones y accesos.
+- Vistas de QR de emergencia y SafeMed.
 
-| Technology | Purpose |
-|---|---|
-| AWS Lambda | Serverless backend processing |
-| Amazon S3 | Private clinical document storage |
-| PostgreSQL | Clinical metadata and application data |
-| Python | Backend logic and PDF generation |
-| JavaScript | Frontend functionality |
-| HTML5 / CSS3 | User interface |
+### Portal profesional
 
-## 🔐 Cloud Architecture
+- Panel de jornada clínica.
+- Búsqueda y consulta de fichas de demostración.
+- Agenda y gestión visual de citas.
+- Consulta y previsualización de documentos.
 
-The solution integrates serverless processing, private object storage and a relational database.
+## Tecnologías presentes en esta versión
 
-The professional portal uses AWS Lambda to generate clinical PDF documents, store them in a private Amazon S3 bucket and register document metadata in PostgreSQL.
+- HTML5
+- CSS3
+- JavaScript (vanilla)
+- `sessionStorage` para mantener la identidad ficticia de la demo del paciente
 
-## 👥 Team Collaboration
+## Estructura
 
-Developed collaboratively as part of a technology project.
+```text
+vik-salud/
+├── index.html              # Inicio de la demo
+├── demo-paciente.html      # Entrada al portal paciente con identidad ficticia
+├── demo.css
+├── demo-data.js            # Datos sintéticos compartidos
+├── document-ui.js          # Componentes de previsualización documental
+├── vik-theme.css           # Tema compartido
+├── vik-theme.js
+├── paciente/               # Portal del paciente
+├── doctor/                 # Portal profesional
+├── login/                  # Pantalla de acceso (autenticación deshabilitada en esta demo)
+└── docs/
+    ├── architecture.md
+    └── security.md
+```
 
-My participation involved contributing to the team's development and implementation efforts, working with cloud technologies and digital healthcare solutions.
+## Ejecutar localmente
 
-## 🏆 Recognition
+Desde la carpeta raíz del proyecto:
 
-**Second Place — Morris Project Presentation**
+```bash
+python -m http.server 8000
+```
 
-## 📚 Key Learning Outcomes
+Luego abre `http://localhost:8000`.
 
-- Practical application of AWS cloud services.
-- Serverless backend development.
-- Integration between AWS Lambda, S3 and PostgreSQL.
-- Clinical document generation and storage workflows.
-- Healthcare data management considerations.
-- Collaborative software development.
+También puedes abrir `index.html` directamente, pero se recomienda usar un servidor local para evitar restricciones del navegador con algunos recursos.
 
-## ⚠️ Security & Privacy
+## Publicar la demo con GitHub Pages
 
-This repository is intended for technical demonstration and documentation.
+1. Sube esta carpeta a un repositorio GitHub después de contar con la autorización del equipo.
+2. En el repositorio, abre **Settings → Pages**.
+3. En **Build and deployment**, selecciona **Deploy from a branch**.
+4. Selecciona la rama principal y la carpeta `/ (root)`.
+5. Guarda y espera a que GitHub Pages entregue la URL.
 
-No real patient records, personally identifiable information, credentials or production secrets should be published.
+## Alcance y backend
 
-All demonstration data must be fictional or anonymized.
+Este ZIP contiene los portales web y su modo de demostración. **No incluye el código del backend, funciones AWS Lambda, infraestructura ni scripts de base de datos.** La pantalla de login se conserva como referencia visual, pero el envío de credenciales está deshabilitado en esta versión pública para evitar enviar datos a un servicio externo. No ingreses contraseñas reales.
 
----
+Antes de documentar o publicar la arquitectura AWS completa, se debe integrar y revisar el repositorio del backend y confirmar qué servicios y configuraciones están autorizados para divulgarse.
 
-*Building technology for better-connected healthcare, one byte at a time.* 🌙
+## Créditos y colaboración
+
+VIK Salud fue desarrollado como proyecto colaborativo. La descripción de contribuciones individuales debe completarse de acuerdo con el trabajo realizado por cada integrante y con la autorización del equipo.
+
+## Seguridad y privacidad
+
+Consulta [`docs/security.md`](docs/security.md) antes de publicar. No agregues datos reales de pacientes, credenciales, archivos `.env`, claves, tokens ni configuraciones privadas.

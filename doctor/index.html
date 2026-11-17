@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIK Salud · Portal profesional</title>
+  <script src="../demo-data.js"></script>
+  <script src="../document-ui.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../vik-theme.css">
+  <script src="../vik-theme.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div class="brand-copy">
+          <strong>VIK Salud</strong>
+          <span>Portal profesional</span>
+        </div>
+      </div>
+
+      <div class="workspace-label">ESPACIO CLÍNICO</div>
+      <nav class="nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="inicio"><span class="nav-icon">⌂</span><span>Inicio</span></button>
+        <button class="nav-item" data-view="pacientes"><span class="nav-icon">◎</span><span>Pacientes</span></button>
+        <button class="nav-item" data-view="agenda"><span class="nav-icon">▣</span><span>Agenda</span></button>
+        <button class="nav-item" data-view="documentos"><span class="nav-icon">▤</span><span>Documentos</span></button>
+      </nav>
+      <div class="sidebar-context"><span>Establecimiento actual</span><strong>CESFAM Norte</strong><small>Medicina general</small></div>
+
+      <div class="sidebar-footer">
+        <div class="avatar">IF</div>
+        <div>
+          <strong>Dra. I. Fernández</strong>
+          <span>Medicina general</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">VIK Salud</p>
+          <h1 id="pageTitle" tabindex="-1">Mi jornada clínica</h1>
+          <p class="subtle" id="pageSubtitle">Resumen del día y acceso rápido a pacientes.</p>
+        </div>
+        <div class="top-actions">
+          <button class="theme-button" type="button" data-theme-toggle></button>
+          <button class="icon-button" id="notificationBtn" title="Notificaciones">◌</button>
+          <div class="profile-button">
+            <span class="avatar small">IF</span>
+            <span>Dra. I. Fernández</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- INICIO -->
+      <section class="view active" id="view-inicio">
+        <div id="nextPatient" class="next-patient"></div>
+        <div class="clinical-context"><span><span class="context-dot"></span> Portal profesional · Red VIK</span><span>Datos de demostración · 30 sep 2026</span></div>
+        <section class="hero-card">
+          <div>
+            <span class="eyebrow">Continuidad del cuidado</span>
+            <h2>Acceso a ficha clínica</h2>
+            <p>Busca por nombre, RUT o ID VIK.</p>
+          </div>
+          <form class="search-box" id="homeSearchForm">
+            <input id="homeSearchInput" aria-label="Buscar paciente por nombre, RUT o ID VIK" placeholder="Nombre, RUT o ID VIK" autocomplete="off" required>
+            <button class="primary-button" type="submit">Buscar paciente</button>
+          </form>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card">
+            <span>Citas de la jornada</span>
+            <strong id="todayCount">0</strong>
+            <small class="badge purple">Agenda</small>
+          </article>
+          <article class="stat-card">
+            <span>Pacientes registrados</span>
+            <strong id="patientCount">0</strong>
+            <small class="badge mint">VIK</small>
+          </article>
+          <article class="stat-card">
+            <span>Alertas SafeMed</span>
+            <strong id="alertCount">0</strong>
+            <small class="badge peach">Revisión</small>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Agenda</p>
+                <h3>Pacientes de hoy</h3>
+              </div>
+              <button class="text-button" data-jump="agenda">Ver calendario</button>
+            </div>
+            <div id="todayAppointments"></div>
+          </article>
+
+          <article class="panel review-panel" id="reviewPanel" tabindex="-1">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Seguridad del paciente · SafeMed</p>
+                <h3>Revisión clínica</h3>
+              </div>
+              <span class="status-dot"></span>
+            </div>
+            <div id="safeMedAlerts"></div>
+            <p class="demo-note">Alertas ilustrativas. Evaluación automática aún no conectada.</p>
+          </article>
+        </section>
+      </section>
+
+      <!-- PACIENTES -->
+      <section class="view" id="view-pacientes">
+        <div class="section-toolbar">
+          <div class="toolbar-search">
+            <input id="patientSearchInput" placeholder="Buscar por nombre, RUT o ID VIK...">
+          </div>
+          <select id="patientFilter">
+            <option value="all">Todos</option>
+            <option value="cronico">Pacientes crónicos</option>
+            <option value="alerta">Con alerta SafeMed</option>
+          </select>
+          <button class="primary-button" id="registerPatientBtn">+ Registrar paciente</button>
+        </div>
+        <div class="notice-card">
+          <strong>Evitar duplicados:</strong>
+          antes de crear un paciente, VIK busca el RUT. Si ya existe por una atención en otro establecimiento, se reutiliza la misma ficha y se agrega una nueva atención.
+        </div>
+        <div class="cards-grid" id="patientCards"></div>
+      </section>
+
+      <!-- AGENDA -->
+      <section class="view" id="view-agenda">
+        <div class="agenda-overview"><div><p class="eyebrow">Planificación asistencial</p><h2>Organiza la continuidad del cuidado</h2><p class="subtle">Consulta especialidades, revisa la jornada y programa el próximo control.</p></div><button class="primary-button" id="newAppointmentBtn">+ Agendar cita</button></div>
+        <div class="agenda-metrics" id="agendaMetrics"></div>
+        <div class="section-toolbar agenda-filters"><div class="filter-group"><label>Especialidad<select id="agendaSpecialty"><option value="all">Todas las especialidades</option></select></label><label>Estado<select id="agendaStatus"><option value="all">Todos los estados</option><option value="pendiente">Pendientes</option><option value="finalizada">Finalizadas</option></select></label><label>Profesional<select id="agendaProfessional"><option value="all">Todos los profesionales</option></select></label></div><button class="secondary-button" id="calendarToday">Hoy</button></div>
+        <div class="agenda-mode" aria-label="Vista de agenda"><button data-agenda-mode="day" aria-pressed="false">Día</button><button data-agenda-mode="week" aria-pressed="false">Semana</button><button data-agenda-mode="month" aria-pressed="true">Mes</button></div>
+        <div id="scheduleView" hidden></div>
+        <div class="calendar-layout">
+          <article class="panel calendar-panel">
+            <div class="calendar-toolbar">
+              <button class="icon-button flat" id="prevMonth" aria-label="Mes anterior">‹</button>
+              <div>
+                <p class="eyebrow">Agenda</p>
+                <h2 id="calendarTitle">Septiembre 2026</h2>
+              </div>
+              <button class="icon-button flat" id="nextMonth" aria-label="Mes siguiente">›</button>
+            </div>
+            <div class="calendar-weekdays">
+              <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <details class="specialty-guide">
+              <summary>Símbolos de especialidades</summary>
+              <div id="specialtyLegend" class="specialty-legend"></div>
+            </details>
+          </article>
+
+          <aside class="panel day-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Día seleccionado</p>
+                <h3 id="selectedDateTitle">30 septiembre</h3>
+              </div>
+            </div>
+            <div id="selectedDayAppointments"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- DOCUMENTOS -->
+      <section class="view" id="view-documentos">
+        <div class="document-intro"><div><p class="eyebrow">Archivo clínico</p><h2>Documentos que conectan la atención</h2><p class="subtle">Recetas, resultados e informes con su origen y contexto clínico.</p></div><span class="document-emblem" aria-hidden="true">▤</span></div>
+        <div id="documentCategories" class="document-categories"></div>
+        <div class="section-toolbar wrap">
+          <div class="toolbar-search">
+            <input id="documentSearch" placeholder="Buscar examen, informe, receta...">
+          </div>
+          <select id="documentPatientFilter">
+            <option value="all">Todos los pacientes</option>
+          </select>
+          <select id="documentTypeFilter">
+            <option value="all">Todos los tipos</option>
+            <option value="Examen">Exámenes</option>
+            <option value="Informe">Informes</option>
+            <option value="Receta">Recetas</option>
+            <option value="Imagen">Imágenes</option>
+            <option value="Otro">Otros</option>
+          </select>
+          <select id="documentPlaceFilter" aria-label="Establecimiento de documentos"><option value="all">Todos los establecimientos</option></select>
+          <label class="date-filter">Desde<input id="documentFrom" type="date"></label><label class="date-filter">Hasta<input id="documentTo" type="date"></label>
+          <button class="secondary-button" id="clearDocuments">Limpiar filtros</button>
+        </div>
+
+        <div class="documents-summary" id="documentsSummary"></div>
+
+        <div class="documents-table" id="documentsTable"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- FICHA CLÍNICA -->
+  <div class="overlay hidden" id="recordOverlay">
+    <section class="record-shell">
+      <header class="record-header">
+        <button class="back-button" id="closeRecord">← Volver</button>
+        <div class="record-person">
+          <div class="avatar xl" id="recordInitials">AP</div>
+          <div>
+            <p class="eyebrow">Ficha clínica longitudinal</p>
+            <h2 id="recordName">Ana Pérez</h2>
+            <p class="subtle" id="recordMeta"></p>
+          </div>
+        </div>
+        <div class="record-actions">
+          <button class="secondary-button" id="recordDocumentsBtn">Documentos</button>
+          <button class="primary-button" id="addAttentionBtn">+ Nueva atención</button>
+        </div>
+      </header>
+      <div id="clinicalStrip" class="clinical-strip"></div>
+
+      <div class="record-alerts" id="recordAlerts"></div>
+
+      <nav class="record-tabs">
+        <button class="record-tab active" data-tab="resumen">Resumen</button>
+        <button class="record-tab" data-tab="atenciones">Atenciones</button>
+        <button class="record-tab" data-tab="antecedentes">Antecedentes</button>
+        <button class="record-tab" data-tab="documentos">Exámenes y documentos</button>
+        <button class="record-tab" data-tab="decisiones">Decisiones y preferencias</button>
+      </nav>
+
+      <div class="record-body">
+        <section class="record-tab-panel active" id="record-resumen">
+          <div class="record-grid clinical-record-grid">
+            <article class="record-card">
+              <p class="eyebrow">Identificación</p>
+              <div class="detail-grid" id="recordIdentity"></div>
+            </article>
+
+            <article class="record-card">
+              <p class="eyebrow">Información crítica</p>
+              <div id="recordCritical"></div>
+            </article>
+
+            <article class="record-card span-2">
+              <div class="card-title-row">
+                <div>
+                  <p class="eyebrow">Problemas y condiciones activas</p>
+                  <h3>Resumen clínico</h3>
+                </div>
+              </div>
+              <div class="clinical-columns">
+                <div>
+                  <h4>Alergias</h4>
+                  <div id="recordAllergies"></div>
+                </div>
+                <div>
+                  <h4>Condiciones</h4>
+                  <div id="recordConditions"></div>
+                </div>
+                <div>
+                  <h4>Medicamentos actuales</h4>
+                  <div id="recordMedications"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="record-card span-2">
+              <p class="eyebrow">Continuidad de atención</p>
+              <h3>Establecimientos donde registra atenciones</h3>
+              <div id="recordProviders" class="provider-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="record-tab-panel" id="record-atenciones">
+          <div class="record-card">
+            <div class="card-title-row">
+              <div>
+                <p class="eyebrow">Registro cronológico</p>
+                <h3>Atenciones de salud</h3>
+              </div>
+              <select id="attentionPlaceFilter">
+                <option value="all">Todos los establecimientos</option>
+              </select>
+            </div>
+            <div class="timeline" id="recordTimeline"></div>
+          </div>
+        </section>
+
+        <section class="record-tab-panel" id="record-antecedentes">
+          <div class="record-grid">
+            <article class="record-card">
+              <p class="eyebrow">Antecedentes personales</p>
+              <div id="recordPersonalHistory"></div>
+            </article>
+            <article class="record-card">
+              <p class="eyebrow">Antecedentes familiares</p>
+              <div id="recordFamilyHistory"></div>
+            </article>
+            <article class="record-card span-2">
+              <p class="eyebrow">Observaciones clínicas relevantes</p>
+              <div id="recordObservations"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="record-tab-panel" id="record-documentos">
+          <div class="record-card">
+            <div class="card-title-row">
+              <div>
+                <p class="eyebrow">Documentos asociados</p>
+                <h3>Exámenes, informes, recetas e imágenes</h3>
+              </div>
+            </div>
+            <div id="recordDocuments"></div>
+          </div>
+        </section>
+
+        <section class="record-tab-panel" id="record-decisiones">
+          <div class="record-grid">
+            <article class="record-card">
+              <p class="eyebrow">Decisiones del paciente</p>
+              <div id="recordDecisions"></div>
+            </article>
+            <article class="record-card">
+              <p class="eyebrow">Preferencias culturales o religiosas</p>
+              <div id="recordPreferences"></div>
+            </article>
+            <article class="record-card span-2">
+              <p class="eyebrow">Consentimientos y rechazos</p>
+              <div id="recordConsents"></div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <!-- REGISTRO DE PACIENTE -->
+  <div class="modal-backdrop hidden" id="registerModal">
+    <section class="modal register-modal">
+      <button class="modal-close" id="closeRegister">×</button>
+      <div class="modal-title">
+        <p class="eyebrow">Registro de paciente</p>
+        <h2>Buscar antes de crear</h2>
+        <p class="subtle">Primero verifica el RUT para no duplicar una ficha que ya existe en VIK.</p>
+      </div>
+
+      <form id="lookupPatientForm" class="lookup-row">
+        <input id="lookupRut" placeholder="RUT del paciente" required>
+        <button class="primary-button" type="submit">Verificar</button>
+      </form>
+
+      <div id="lookupResult"></div>
+
+      <form id="newPatientForm" class="new-patient-form hidden">
+        <div class="form-grid">
+          <label>Nombre<input id="newName" required></label>
+          <label>Apellido<input id="newLastName" required></label>
+          <label>Fecha de nacimiento<input id="newBirthDate" type="date" required></label>
+          <label>Sexo<input id="newSex" placeholder="Opcional"></label>
+          <label>Nacionalidad<input id="newNationality" placeholder="Opcional"></label>
+          <label>Grupo sanguíneo<input id="newBlood" placeholder="Ej: O+"></label>
+          <label>Teléfono<input id="newPhone"></label>
+          <label>Correo<input id="newEmail" type="email"></label>
+          <label>Religión / convicción<input id="newReligion" placeholder="Opcional"></label>
+          <label>Etnia / pertenencia cultural<input id="newEthnicity" placeholder="Opcional"></label>
+        </div>
+        <button class="primary-button" type="submit">Crear paciente en esta demo</button>
+        <p class="demo-note">Los cambios de esta demostración se pierden al recargar la página.</p>
+      </form>
+    </section>
+  </div>
+
+  <!-- NUEVA ATENCIÓN (demo frontend) -->
+  <div class="modal-backdrop hidden" id="attentionModal">
+    <section class="modal">
+      <button class="modal-close" id="closeAttention">×</button>
+      <div class="modal-title">
+        <p class="eyebrow">Nueva atención</p>
+        <h2 id="attentionPatientName">Paciente</h2>
+      </div>
+      <form id="attentionForm" class="new-patient-form">
+        <div class="form-grid">
+          <label>Establecimiento
+            <select id="attentionPlace">
+              <option>CESFAM Norte</option>
+              <option>Clínica Central</option>
+              <option>Hospital Regional</option>
+            </select>
+          </label>
+          <label>Fecha y hora<input id="attentionDate" type="datetime-local" required></label>
+          <label class="span-2">Motivo de consulta<textarea id="attentionReason" required></textarea></label>
+          <label class="span-2">Anamnesis / evolución<textarea id="attentionAnamnesis"></textarea></label>
+          <label class="span-2">Evaluación / diagnóstico<textarea id="attentionDiagnosis"></textarea></label>
+          <label class="span-2">Indicaciones<textarea id="attentionPlan"></textarea></label>
+        </div>
+        <div class="attention-steps"><span>1 · Registrar</span><span>2 · Revisar</span><span>3 · Finalizar</span></div>
+        <p class="demo-note">Un borrador no se incorpora al historial hasta finalizarlo.</p>
+        <div class="record-actions"><button class="secondary-button" type="button" id="saveAttentionDraft">Guardar borrador</button><button class="primary-button" type="submit">Revisar atención</button></div>
+      </form>
+    </section>
+  </div>
+
+  <dialog id="appointmentDialog" class="appointment-dialog">
+    <form id="appointmentForm" class="new-patient-form">
+      <div class="dialog-heading"><div><p class="eyebrow">Continuidad del cuidado</p><h2>Agendar una cita</h2></div><button type="button" class="icon-button" id="closeAppointment" aria-label="Cerrar cita">×</button></div>
+      <div class="form-grid">
+        <label class="span-2">Paciente<select id="appointmentPatient" required></select></label>
+        <label>Especialidad<select id="appointmentSpecialty" required></select></label>
+        <label>Establecimiento<select id="appointmentPlace"><option>CESFAM Norte</option><option>CESFAM Sur</option><option>Clínica Central</option><option>Hospital Regional</option></select></label>
+        <label>Fecha<input id="appointmentDate" type="date" required></label>
+        <label>Hora<input id="appointmentTime" type="time" required></label>
+        <label>Profesional<select id="appointmentProfessional" required></select></label>
+        <label>Duración<select id="appointmentDuration"><option value="20">20 minutos</option><option value="30">30 minutos</option><option value="45">45 minutos</option><option value="60">60 minutos</option></select></label>
+        <label class="span-2">Motivo de la cita<input id="appointmentReason" maxlength="160" required placeholder="Ej.: control de tratamiento"></label>
+      </div>
+      <p class="form-error" id="appointmentError" role="alert"></p>
+      <p class="demo-note">Demo: los cambios se mantienen mientras esta página esté abierta.</p>
+      <button class="primary-button" type="submit">Confirmar cita</button>
+    </form>
+  </dialog>
+  <dialog id="documentDialog" aria-labelledby="documentDialogTitle"><div class="dialog-heading"><h2 id="documentDialogTitle">Documento clínico</h2><button class="icon-button" data-close-dialog="documentDialog" aria-label="Cerrar documento">×</button></div><div id="documentDialogContent"></div></dialog>
+  <dialog id="reviewDialog" aria-labelledby="reviewTitle"><div class="dialog-heading"><h2 id="reviewTitle">Revisar atención</h2><button class="icon-button" data-close-dialog="reviewDialog" aria-label="Volver al registro">×</button></div><div id="reviewContent"></div><p class="demo-note">Al finalizar se incorporará a la ficha de esta sesión de demostración.</p><button class="primary-button" id="finalizeAttention">Finalizar atención</button></dialog>
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

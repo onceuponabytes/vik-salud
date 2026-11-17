@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VIK Salud · Mi salud</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="../vik-theme.css"><script src="../demo-data.js" defer></script><script src="../document-ui.js" defer></script><script src="../vik-theme.js" defer></script><script src="app.js" defer></script></head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">V</span><div><strong>VIK Salud</strong><small>Portal del paciente</small></div></div>
+    <p class="workspace-label">MI ESPACIO DE SALUD</p>
+    <nav id="navigation" aria-label="Navegación principal"></nav>
+    <div class="sidebar-context"><span>Mi red de atención</span><strong>Una ficha VIK</strong><small>CESFAM · Clínica · Hospital</small></div>
+    <div class="sidebar-footer"><span class="avatar">AP</span><div><strong>Ana Pérez</strong><small>Una identidad. Una ficha.</small></div></div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="topbar"><div><p class="eyebrow">VIK · Portal del paciente</p><h1 id="pageTitle" tabindex="-1">Mi salud, en un lugar</h1><p id="pageSubtitle" class="muted">Tu información y tu cuidado, conectados.</p></div><div class="top-actions"><button class="theme-button" type="button" data-theme-toggle></button><button class="profile" data-view="ficha" aria-label="Ver mi ficha"><span class="avatar">AP</span><span>Ana Pérez</span></button></div></header>
+    <div class="demo-banner"><span class="dot"></span> Demostración con datos ficticios <span>Los cambios se reinician al recargar.</span></div>
+    <div id="loadError" role="alert" hidden></div>
+    <section id="view-inicio" class="view" aria-label="Inicio"></section>
+    <section id="view-ficha" class="view" aria-label="Mi ficha" hidden></section>
+    <section id="view-documentos" class="view" aria-label="Documentos" hidden>
+      <div class="document-intro"><div><p class="eyebrow">Tu archivo de salud</p><h2>Cada documento, en su lugar</h2><p class="muted">Encuentra tus recetas y resultados, junto a la atención que les dio origen.</p></div><span class="document-emblem" aria-hidden="true">▤</span></div>
+      <div id="documentCategories" class="document-categories"></div>
+      <form id="documentFilters" class="filters panel" role="search">
+        <label class="grow">Buscar documento<input id="docSearch" type="search" placeholder="Nombre o establecimiento"></label>
+        <label>Tipo<select id="docType"><option value="all">Todos los tipos</option><option>Examen</option><option>Receta</option><option>Informe</option><option>Imagen</option><option>Otro</option></select></label>
+        <label>Establecimiento<select id="docPlace"><option value="all">Todos</option></select></label>
+        <label>Desde<input id="docFrom" type="date"></label><label>Hasta<input id="docTo" type="date"></label>
+        <button type="reset" class="secondary">Limpiar</button>
+      </form>
+      <p id="documentCount" class="muted" role="status"></p><div id="documentList" class="panel"></div>
+    </section>
+    <section id="view-citas" class="view" aria-label="Mis citas" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Tu próxima visita</p><h2>Organiza tu cuidado</h2></div><button class="secondary" id="todayButton">Hoy</button></div>
+      <details class="patient-calendar"><summary>Consultar calendario mensual</summary><div class="calendar-layout"><article class="panel"><div class="calendar-toolbar"><button class="icon-button" id="prevMonth" aria-label="Mes anterior">‹</button><h2 id="calendarTitle"></h2><button class="icon-button" id="nextMonth" aria-label="Mes siguiente">›</button></div><div class="weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div id="calendar" class="calendar"></div><p class="caption">🩺 Medicina general · ❤️ Cardiología · 🔬 Laboratorio</p></article><aside class="panel"><p class="eyebrow">Día seleccionado</p><h2 id="selectedDay"></h2><div id="dayAppointments"></div></aside></div></details>
+      <div class="section-heading"><h2>Mis citas</h2><div class="segmented" aria-label="Filtrar citas"><button data-period="upcoming" aria-pressed="true">Próximas</button><button data-period="past" aria-pressed="false">Anteriores</button></div></div><div id="appointmentList" class="grid two"></div><p class="caption">Los recordatorios son visuales en esta demo; no envían notificaciones.</p>
+    </section>
+    <section id="view-accesos" class="view" aria-label="Accesos" hidden></section>
+    <section id="view-qr" class="view" aria-label="QR de emergencia" hidden></section>
+    <section id="view-safemed" class="view" aria-label="SafeMed" hidden></section>
+    <footer>VIK Salud <span>Tu historia de salud te acompaña.</span></footer>
+  </main>
+</div>
+<dialog id="modal" aria-labelledby="modalTitle"><div class="dialog-heading"><h2 id="modalTitle"></h2><button class="icon-button" id="closeModal" aria-label="Cerrar ventana">×</button></div><div id="modalContent"></div></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<noscript>Activa JavaScript para usar esta demostración del portal del paciente.</noscript>
+</body></html>

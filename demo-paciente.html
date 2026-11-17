@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIK Salud · Demo paciente</title>
+</head>
+<body>
+  <p>Abriendo el portal de paciente de demostración…</p>
+  <script>
+    // Identidad local exclusivamente demostrativa; no es autenticación.
+    sessionStorage.setItem("vikUser", JSON.stringify({ name: "Ana", last_name: "Pérez", role: "paciente" }));
+    window.location.replace("paciente/index.html");
+  </script>
+  <noscript>Activa JavaScript para continuar con la demostración.</noscript>
+</body>
+</html>
